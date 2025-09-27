@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Video Downloader</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="assets/icon-192.png">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎬 Video Downloader</h1>
+            <p>For educational use only</p>
+        </header>
+
+        <main>
+            <div class="download-section">
+                <!-- URL Input Section -->
+                <div class="input-section">
+                    <div class="input-group">
+                        <input type="url" id="videoUrl" 
+                               placeholder="Paste video link here..." 
+                               enterkeyhint="go">
+                        <button id="fetchInfoBtn" class="primary-btn">
+                            <span class="btn-text">Get Video</span>
+                            <span class="btn-loading hidden">⏳</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Loading Indicator -->
+                <div id="loading" class="hidden">
+                    <div class="mobile-spinner"></div>
+                    <p>Getting video info...</p>
+                </div>
+
+                <!-- Error Message -->
+                <div id="errorMessage" class="error hidden"></div>
+
+                <!-- Video Info Section -->
+                <div id="videoInfo" class="hidden">
+                    <div class="video-card">
+                        <div class="thumbnail-container">
+                            <img id="thumbnail" src="" alt="Video thumbnail" loading="lazy">
+                        </div>
+                        <div class="video-details">
+                            <h3 id="videoTitle"></h3>
+                            <div class="meta-info">
+                                <span id="videoUploader"></span>
+                                <span id="videoDuration"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Formats Selection -->
+                    <div class="formats-section">
+                        <h4>📹 Available Qualities</h4>
+                        <div id="formatsList" class="formats-grid"></div>
+                    </div>
+
+                    <!-- Download Button -->
+                    <button id="downloadBtn" class="download-btn hidden">
+                        📥 Download Selected Quality
+                    </button>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <button class="action-btn paste-btn">📋 Paste</button>
+                    <button class="action-btn clear-btn">🗑️ Clear</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Mobile Footer -->
+        <footer class="mobile-footer">
+            <p>⚠️ For personal/educational use only</p>
+        </footer>
+    </div>
+
+    <!-- Touch Feedback Overlay -->
+    <div id="touchFeedback" class="touch-feedback"></div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
