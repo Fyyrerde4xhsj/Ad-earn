@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Walking to My Website</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #fff;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .walking-container {
+            position: relative;
+            height: 200px;
+            margin: 40px 0;
+            overflow: hidden;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .path {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 20px;
+            background: #5a5a5a;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .walker {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 60px;
+            height: 100px;
+            transition: left 0.5s ease-in-out;
+            z-index: 10;
+        }
+        
+        .walker-body {
+            position: absolute;
+            width: 30px;
+            height: 50px;
+            background: #3498db;
+            border-radius: 15px 15px 0 0;
+            left: 15px;
+            top: 0;
+        }
+        
+        .walker-head {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: #ffcc99;
+            border-radius: 50%;
+            left: 17.5px;
+            top: -15px;
+        }
+        
+        .leg {
+            position: absolute;
+            width: 10px;
+            height: 40px;
+            background: #2c3e50;
+            bottom: -20px;
+        }
+        
+        .leg-left {
+            left: 20px;
+            transform-origin: top;
+            animation: walk-left 1s infinite alternate;
+        }
+        
+        .leg-right {
+            left: 30px;
+            transform-origin: top;
+            animation: walk-right 1s infinite alternate;
+        }
+        
+        .arm {
+            position: absolute;
+            width: 8px;
+            height: 30px;
+            background: #2c3e50;
+            top: 15px;
+        }
+        
+        .arm-left {
+            left: 10px;
+            transform-origin: top;
+            animation: arm-left 1s infinite alternate;
+        }
+        
+        .arm-right {
+            left: 42px;
+            transform-origin: top;
+            animation: arm-right 1s infinite alternate;
+        }
+        
+        .milestone {
+            position: absolute;
+            bottom: 40px;
+            width: 3px;
+            height: 15px;
+            background: #fff;
+        }
+        
+        .milestone-label {
+            position: absolute;
+            bottom: 60px;
+            font-size: 0.8rem;
+            transform: translateX(-50%);
+        }
+        
+        .website-destination {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            width: 80px;
+            height: 80px;
+            background: #2ecc71;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(46, 204, 113, 0.5);
+        }
+        
+        .progress-container {
+            margin: 30px 0;
+        }
+        
+        .progress-bar {
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #2ecc71, #1abc9c);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .stat-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px;
+            min-width: 150px;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            background: #3498db;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        button:hover {
+            background: #2980b9;
+            transform: translateY(-3px);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        @keyframes walk-left {
+            0% { transform: rotate(-20deg); }
+            100% { transform: rotate(20deg); }
+        }
+        
+        @keyframes walk-right {
+            0% { transform: rotate(20deg); }
+            100% { transform: rotate(-20deg); }
+        }
+        
+        @keyframes arm-left {
+            0% { transform: rotate(20deg); }
+            100% { transform: rotate(-20deg); }
+        }
+        
+        @keyframes arm-right {
+            0% { transform: rotate(-20deg); }
+            100% { transform: rotate(20deg); }
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .stats {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Walking to My Website</h1>
+        <p class="subtitle">Tracking my steps as I journey to my online destination</p>
+        
+        <div class="walking-container">
+            <div class="path"></div>
+            
+            <!-- Milestones -->
+            <div class="milestone" style="left: 10%;"></div>
+            <div class="milestone-label" style="left: 10%;">10%</div>
+            
+            <div class="milestone" style="left: 25%;"></div>
+            <div class="milestone-label" style="left: 25%;">25%</div>
+            
+            <div class="milestone" style="left: 50%;"></div>
+            <div class="milestone-label" style="left: 50%;">Halfway!</div>
+            
+            <div class="milestone" style="left: 75%;"></div>
+            <div class="milestone-label" style="left: 75%;">75%</div>
+            
+            <div class="milestone" style="left: 90%;"></div>
+            <div class="milestone-label" style="left: 90%;">90%</div>
+            
+            <!-- Walker -->
+            <div class="walker" id="walker">
+                <div class="walker-head"></div>
+                <div class="walker-body"></div>
+                <div class="leg leg-left"></div>
+                <div class="leg leg-right"></div>
+                <div class="arm arm-left"></div>
+                <div class="arm arm-right"></div>
+            </div>
+            
+            <!-- Destination -->
+            <div class="website-destination">
+                Website
+            </div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <div id="progress-text">Progress: 0%</div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-value" id="steps">0</div>
+                <div>Steps Taken</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="distance">0</div>
+                <div>Distance Traveled</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="remaining">1000</div>
+                <div>Steps Remaining</div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="start-btn">Start Walking</button>
+            <button id="reset-btn">Reset Journey</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const walker = document.getElementById('walker');
+            const progress = document.getElementById('progress');
+            const progressText = document.getElementById('progress-text');
+            const stepsElement = document.getElementById('steps');
+            const distanceElement = document.getElementById('distance');
+            const remainingElement = document.getElementById('remaining');
+            const startBtn = document.getElementById('start-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            
+            let steps = 0;
+            let distance = 0;
+            let progressPercentage = 0;
+            let isWalking = false;
+            let walkInterval;
+            
+            const totalSteps = 1000; // Total steps to reach the website
+            const stepDistance = 0.7; // Distance per step in meters
+            const containerWidth = document.querySelector('.walking-container').offsetWidth;
+            
+            function updateDisplay() {
+                stepsElement.textContent = steps;
+                distanceElement.textContent = distance.toFixed(2) + ' m';
+                remainingElement.textContent = totalSteps - steps;
+                
+                progressPercentage = (steps / totalSteps) * 100;
+                progress.style.width = progressPercentage + '%';
+                progressText.textContent = `Progress: ${progressPercentage.toFixed(1)}%`;
+                
+                // Move the walker
+                const walkerPosition = (progressPercentage / 100) * (containerWidth - 80);
+                walker.style.left = walkerPosition + 'px';
+            }
+            
+            function takeStep() {
+                if (steps < totalSteps) {
+                    steps++;
+                    distance += stepDistance;
+                    updateDisplay();
+                    
+                    if (steps >= totalSteps) {
+                        clearInterval(walkInterval);
+                        isWalking = false;
+                        startBtn.textContent = 'Start Walking';
+                        alert("Congratulations! You've reached your website!");
+                    }
+                }
+            }
+            
+            startBtn.addEventListener('click', function() {
+                if (!isWalking) {
+                    isWalking = true;
+                    startBtn.textContent = 'Pause Walking';
+                    walkInterval = setInterval(takeStep, 200); // Take a step every 200ms
+                } else {
+                    isWalking = false;
+                    startBtn.textContent = 'Resume Walking';
+                    clearInterval(walkInterval);
+                }
+            });
+            
+            resetBtn.addEventListener('click', function() {
+                clearInterval(walkInterval);
+                isWalking = false;
+                steps = 0;
+                distance = 0;
+                startBtn.textContent = 'Start Walking';
+                updateDisplay();
+            });
+            
+            // Initialize display
+            updateDisplay();
+        });
+    </script>
+</body>
+</html>
