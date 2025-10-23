@@ -399,17 +399,19 @@
             async function showAdWithLimit() {
   const today = new Date().toISOString().split("T")[0];
 
+  // Make sure user data exists and valid
   if (!userData) userData = {};
   if (typeof userData.dailyAdCount !== "number") userData.dailyAdCount = 0;
   if (!userData.lastAdWatchDate) userData.lastAdWatchDate = "1970-01-01";
 
+  // Check if Firebase data and user exist
   if (!currentUser || !db) {
-    showAlert("Database not ready. Try reloading.");
+    showAlert("Database not ready. Please refresh page.");
     return;
   }
 
   try {
-    // Reset count on new day
+    // Reset counter when day changes
     if (userData.lastAdWatchDate !== today) {
       userData.dailyAdCount = 0;
       userData.lastAdWatchDate = today;
@@ -419,38 +421,37 @@
       });
     }
 
-    // Check if user reached daily ad limit
+    // Limit user to 10 ads per day
     if (userData.dailyAdCount >= 10) {
-      showAlert("You reached your daily ad limit of 10. Come back tomorrow!");
+      showAlert("You reached your daily ad limit (10). Try again tomorrow!");
       return;
     }
 
-    // Show ad
+    // Show rewarded ad
     await showAd();
-    userData.dailyAdCount++;
 
-    // Save updated count in Firestore
+    // Increase count for today
+    userData.dailyAdCount++;
     await updateDoc(doc(db, "users", currentUser.uid), {
       dailyAdCount: userData.dailyAdCount,
     });
 
     const remaining = 10 - userData.dailyAdCount;
 
-    // Display progress message
     if (remaining > 0) {
       showAlert(
-        `Ad completed successfully!\nYou have watched ${userData.dailyAdCount}/10 ads today.\nYou can watch ${remaining} more.`
+        `You have watched ${userData.dailyAdCount}/10 ads today.\nYou can watch ${remaining} more.`
       );
     } else {
-      showAlert("You have reached your daily limit of 10 ads. Please come back tomorrow!");
+      showAlert("You reached the daily ad limit of 10. Please come back tomorrow.");
     }
 
-    console.log(`Ad progress: ${userData.dailyAdCount}/10`);
   } catch (err) {
     console.error(err);
-    showAlert("You need to watch the full ad to earn rewards.");
+    showAlert("Ad watch failed. Please try again later.");
   }
 }
+
        
             let clickCheckTimeout;
             const onBlur = () => {
@@ -1014,6 +1015,7 @@
 </body>
 
 </html>
+
 
 
 
