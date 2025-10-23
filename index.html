@@ -399,33 +399,59 @@
             async function showAdWithLimit() {
   const today = new Date().toISOString().split("T")[0];
 
-  // Reset daily ad count if a new day
-  if (userData.lastAdWatchDate !== today) {
-    userData.dailyAdCount = 0;
-    userData.lastAdWatchDate = today;
-    await updateDoc(doc(db, "users", currentUser.uid), {
-      dailyAdCount: 0,
-      lastAdWatchDate: today,
-    });
-  }
+  if (!userData) userData = {};
+  if (typeof userData.dailyAdCount !== "number") userData.dailyAdCount = 0;
+  if (!userData.lastAdWatchDate) userData.lastAdWatchDate = "1970-01-01";
 
-  // Check if user reached the daily limit of 10 ads
-  if (userData.dailyAdCount >= 10) {
-    showAlert("You have reached the daily limit of 10 ads. Please come back tomorrow.");
+  if (!currentUser || !db) {
+    showAlert("Database not ready. Try reloading.");
     return;
   }
 
   try {
-    await showAd(); // Your rewarded ad function
-    // Increment ad count after successful ad watch
+    // Reset count on new day
+    if (userData.lastAdWatchDate !== today) {
+      userData.dailyAdCount = 0;
+      userData.lastAdWatchDate = today;
+      await updateDoc(doc(db, "users", currentUser.uid), {
+        dailyAdCount: 0,
+        lastAdWatchDate: today,
+      });
+    }
+
+    // Check if user reached daily ad limit
+    if (userData.dailyAdCount >= 10) {
+      showAlert("You reached your daily ad limit of 10. Come back tomorrow!");
+      return;
+    }
+
+    // Show ad
+    await showAd();
     userData.dailyAdCount++;
-    await updateDoc(doc(db, "users", currentUser.uid), { dailyAdCount: userData.dailyAdCount });
-    // Reward user coins here if needed
+
+    // Save updated count in Firestore
+    await updateDoc(doc(db, "users", currentUser.uid), {
+      dailyAdCount: userData.dailyAdCount,
+    });
+
+    const remaining = 10 - userData.dailyAdCount;
+
+    // Display progress message
+    if (remaining > 0) {
+      showAlert(
+        `Ad completed successfully!\nYou have watched ${userData.dailyAdCount}/10 ads today.\nYou can watch ${remaining} more.`
+      );
+    } else {
+      showAlert("You have reached your daily limit of 10 ads. Please come back tomorrow!");
+    }
+
+    console.log(`Ad progress: ${userData.dailyAdCount}/10`);
   } catch (err) {
+    console.error(err);
     showAlert("You need to watch the full ad to earn rewards.");
   }
-         }
-
+}
+       
             let clickCheckTimeout;
             const onBlur = () => {
                 window.removeEventListener('blur', onBlur);
@@ -988,6 +1014,7 @@
 </body>
 
 </html>
+
 
 
 
