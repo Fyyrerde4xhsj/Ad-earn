@@ -383,18 +383,36 @@
             }
         }
         
-        function showAdClickTask() {
-            const popup = document.getElementById('ad-click-task-popup');
-            const adStatus = popup.querySelector('#ad-click-status');
-            const showAdBtn = popup.querySelector('#show-ad-click-btn');
-            showAdBtn.classList.add('hidden');
-            adStatus.textContent = "Waiting for you to click on the ad...";
+        async function showAdWithLimit() {
+  const today = new Date().toISOString().split("T")[0];
 
-            showAd().catch(err => {
-                showAlert(err);
-                showAdBtn.classList.remove('hidden');
-                adStatus.textContent = "";
-            });
+  // Reset daily ad count if a new day
+  if (userData.lastAdWatchDate !== today) {
+    userData.dailyAdCount = 0;
+    userData.lastAdWatchDate = today;
+    await updateDoc(doc(db, "users", currentUser.uid), {
+      dailyAdCount: 0,
+      lastAdWatchDate: today,
+    });
+  }
+
+  // Check if user reached the daily limit of 10 ads
+  if (userData.dailyAdCount >= 10) {
+    showAlert("You have reached the daily limit of 10 ads. Please come back tomorrow.");
+    return;
+  }
+
+  try {
+    await showAd(); // Your rewarded ad function
+    // Increment ad count after successful ad watch
+    userData.dailyAdCount++;
+    await updateDoc(doc(db, "users", currentUser.uid), { dailyAdCount: userData.dailyAdCount });
+    // Reward user coins here if needed
+  } catch (err) {
+    showAlert("You need to watch the full ad to earn rewards.");
+  }
+}
+
 
             let clickCheckTimeout;
             const onBlur = () => {
@@ -958,5 +976,6 @@
 </body>
 
 </html>
+
 
 
