@@ -399,7 +399,7 @@
             async function showAdWithLimit() {
   const today = new Date().toISOString().split("T")[0];
 
-  // Reset daily ad count if it's a new day
+  // Reset daily ad count if a new day
   if (userData.lastAdWatchDate !== today) {
     userData.dailyAdCount = 0;
     userData.lastAdWatchDate = today;
@@ -409,26 +409,22 @@
     });
   }
 
-  // Check if user reached daily limit (10)
+  // Check if user reached the daily limit of 10 ads
   if (userData.dailyAdCount >= 10) {
     showAlert("You have reached the daily limit of 10 ads. Please come back tomorrow.");
     return;
   }
 
   try {
-    await showAd(); // Show Monetag ad
+    await showAd(); // Your rewarded ad function
+    // Increment ad count after successful ad watch
     userData.dailyAdCount++;
     await updateDoc(doc(db, "users", currentUser.uid), { dailyAdCount: userData.dailyAdCount });
-
-    // Reward user after watching
-    const reward = appConfig.adWatchReward || 10;
-    await updateBalance(reward, "Ad Watch", "Watched an ad with daily limit");
-    showAlert(`You earned ${reward} coins! (${userData.dailyAdCount}/10 today)`);
-
+    // Reward user coins here if needed
   } catch (err) {
     showAlert("You need to watch the full ad to earn rewards.");
   }
-            }
+         }
 
             let clickCheckTimeout;
             const onBlur = () => {
@@ -992,6 +988,7 @@
 </body>
 
 </html>
+
 
 
 
