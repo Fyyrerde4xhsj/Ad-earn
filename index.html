@@ -162,7 +162,45 @@
     <div id="color-game-popup" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4"></div>
     <div id="ad-click-task-popup" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4"></div>
 
-    <script type="module">
+    <script type="module"> async function signUp() {
+  const name = document.getElementById("register-name").value.trim();
+  const email = document.getElementById("register-email").value.trim();
+  const password = document.getElementById("register-password").value;
+
+  if (!name || !email || !password) {
+    alert("All fields required."); return;
+  }
+  try {
+    const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+    await firebase.firestore().collection("users").doc(userCredential.user.uid).set({
+      name: name,
+      email: email,
+      created: new Date().toISOString()
+    });
+    alert("Registration successful! Please login.");
+    showLogin();
+  } catch (err) {
+    alert(err.message);
+  }
+}
+
+async function signIn() {
+  const email = document.getElementById("login-email").value.trim();
+  const password = document.getElementById("login-password").value;
+
+  if (!email || !password) {
+    alert("Both fields required."); return;
+  }
+  try {
+    await firebase.auth().signInWithEmailAndPassword(email, password);
+    alert("Login successful!");
+    document.getElementById("login-page").style.display = "none";
+    document.getElementById("signup-page").style.display = "none";
+    // Unhide your app here (e.g., document.getElementById("app-container").style.display = "block";)
+  } catch (err) {
+    alert(err.message);
+  }
+}
         const firebaseConfig = {
             apiKey: "AIzaSyBuOCJKCdV9vYyaODa2tbU5gQAOYAZSxdo",
             authDomain: "rewedme-2d715.firebaseapp.com",
@@ -995,6 +1033,7 @@ function showLogin() {
 </body>
 
 </html>
+
 
 
 
