@@ -84,7 +84,6 @@
         </div>
     </div>
     
-    console.log("App script loaded");
   <div id="app-container" class="min-h-screen flex-col main-page" style="display:none;">
        <!-- Signup Page -->
 <div id="signup-page" style="display:flex; justify-content:center; align-items:center; min-height:100vh; background:linear-gradient(180deg,#03c9f4 0%,#1976d2 100%);">
@@ -210,6 +209,7 @@ async function signIn() {
             messagingSenderId: "995026434733",
             appId: "1:995026434733:web:26b3aa505221720e292424",
         };
+        
         firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     document.getElementById("login-page").style.display = "none";
@@ -220,8 +220,7 @@ async function signIn() {
     document.getElementById("signup-page").style.display = "none";
     document.getElementById("app-container").style.display = "none";
   }
-});
-        
+});   
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInAnonymously, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, serverTimestamp, query, where, getDocs, writeBatch, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -1036,6 +1035,7 @@ async function signIn() {
 </body>
 
 </html>
+
 
 
 
