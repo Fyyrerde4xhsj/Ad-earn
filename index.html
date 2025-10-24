@@ -84,7 +84,7 @@
         </div>
     </div>
     
-  <div id="app-container" class="min-h-screen flex-col main-page">
+  <div id="app-container" class="min-h-screen flex-col main-page" style="display:none;">
        <!-- Signup Page -->
 <div id="signup-page" style="display:flex; justify-content:center; align-items:center; min-height:100vh; background:linear-gradient(180deg,#03c9f4 0%,#1976d2 100%);">
   <div style="background:#1490e9; border-radius:22px; max-width:380px; width:100%; padding:36px 28px; box-shadow:0 12px 32px 0 rgba(0,56,178,0.27); text-align:center;">
@@ -209,15 +209,17 @@ async function signIn() {
             messagingSenderId: "995026434733",
             appId: "1:995026434733:web:26b3aa505221720e292424",
         };
-        function showSignup() {
-  document.getElementById("login-page").style.display = "none";
-  document.getElementById("signup-page").style.display = "flex";
-}
-function showLogin() {
-  document.getElementById("signup-page").style.display = "none";
-  document.getElementById("login-page").style.display = "flex";
-}
-        
+        firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    document.getElementById("login-page").style.display = "none";
+    document.getElementById("signup-page").style.display = "none";
+    document.getElementById("app-container").style.display = "block";
+  } else {
+    document.getElementById("login-page").style.display = "flex";
+    document.getElementById("signup-page").style.display = "none";
+    document.getElementById("app-container").style.display = "none";
+  }
+});
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInAnonymously, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, serverTimestamp, query, where, getDocs, writeBatch, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -1032,6 +1034,7 @@ function showLogin() {
 </body>
 
 </html>
+
 
 
 
