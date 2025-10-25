@@ -84,7 +84,7 @@
         </div>
     </div>
 
-    <div id="app-container" class="min-h-screen flex-col main-pag <body>
+    <div id="app-container" class="min-h-screen flex-col main-page" style="display:none;">
   <!-- Signup Page -->
   <div id="signup-page" style="display:flex; justify-content:center; align-items:center; min-height:100vh; background:linear-gradient(180deg,#03c9f4 0%,#1976d2 100%);">
     <div style="background:#1490e9; border-radius:22px; max-width:380px; width:100%; padding:36px 28px; box-shadow:0 12px 32px 0 rgba(0,56,178,0.27); text-align:center;">
@@ -227,15 +227,17 @@ async function signIn() {
   loader.style.display = "flex";
 
   try {
-    // Use modular v9 syntax
     await signInWithEmailAndPassword(auth, email, password);
     
     alert("Login successful!");
     
-    // Hide login/signup pages, show app
+    // Hide login/signup pages
     document.getElementById("login-page").style.display = "none";
     document.getElementById("signup-page").style.display = "none";
+    
+    // Show the main app
     document.getElementById("app-container").style.display = "block";
+    
   } catch (err) {
     alert(err.message);
   } finally {
@@ -1058,6 +1060,7 @@ async function signIn() {
 </body>
 
 </html>
+
 
 
 
