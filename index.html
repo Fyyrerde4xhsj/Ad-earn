@@ -84,10 +84,7 @@
         </div>
     </div>
 
-    <div id="app-container" class="min-h-screen flex-col main-page">
-       <body>
-  <!-- Add these blocks right after <body>! -->
-
+    <div id="app-container" class="min-h-screen flex-col main-pag <body>
   <!-- Signup Page -->
   <div id="signup-page" style="display:flex; justify-content:center; align-items:center; min-height:100vh; background:linear-gradient(180deg,#03c9f4 0%,#1976d2 100%);">
     <div style="background:#1490e9; border-radius:22px; max-width:380px; width:100%; padding:36px 28px; box-shadow:0 12px 32px 0 rgba(0,56,178,0.27); text-align:center;">
@@ -165,7 +162,27 @@
     <div id="color-game-popup" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4"></div>
     <div id="ad-click-task-popup" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4"></div>
 
-    async function signUp() {
+    
+    <script type="module">
+        const firebaseConfig = {
+            apiKey: "AIzaSyBuOCJKCdV9vYyaODa2tbU5gQAOYAZSxdo",
+            authDomain: "rewedme-2d715.firebaseapp.com",
+            databaseURL: "https://rewedme-2d715-default-rtdb.firebaseio.com",
+            projectId: "rewedme-2d715",
+            storageBucket: "rewedme-2d715.firebasestorage.app",
+            messagingSenderId: "995026434733",
+            appId: "1:995026434733:web:26b3aa505221720e292424",
+        };
+        
+        function showSignup() {
+  document.getElementById("login-page").style.display = "none";
+  document.getElementById("signup-page").style.display = "flex";
+}
+function showLogin() {
+  document.getElementById("signup-page").style.display = "none";
+  document.getElementById("login-page").style.display = "flex";
+}
+        async function signUp() {
   const name = document.getElementById("register-name").value.trim();
   const email = document.getElementById("register-email").value.trim();
   const password = document.getElementById("register-password").value;
@@ -204,26 +221,6 @@ async function signIn() {
   } catch (err) {
     alert(err.message);
   }
-}
-    
-    <script type="module">
-        const firebaseConfig = {
-            apiKey: "AIzaSyBuOCJKCdV9vYyaODa2tbU5gQAOYAZSxdo",
-            authDomain: "rewedme-2d715.firebaseapp.com",
-            databaseURL: "https://rewedme-2d715-default-rtdb.firebaseio.com",
-            projectId: "rewedme-2d715",
-            storageBucket: "rewedme-2d715.firebasestorage.app",
-            messagingSenderId: "995026434733",
-            appId: "1:995026434733:web:26b3aa505221720e292424",
-        };
-        
-        function showSignup() {
-  document.getElementById("login-page").style.display = "none";
-  document.getElementById("signup-page").style.display = "flex";
-}
-function showLogin() {
-  document.getElementById("signup-page").style.display = "none";
-  document.getElementById("login-page").style.display = "flex";
 }
         
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -1040,6 +1037,7 @@ function showLogin() {
 </body>
 
 </html>
+
 
 
 
