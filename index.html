@@ -211,15 +211,6 @@ async function signIn() {
             appId: "1:995026434733:web:26b3aa505221720e292424",
         };
         
-        function showSignup() {
-  document.getElementById("login-page").style.display = "none";
-  document.getElementById("signup-page").style.display = "flex";
-}
-function showLogin() {
-  document.getElementById("signup-page").style.display = "none";
-  document.getElementById("login-page").style.display = "flex";
-} 
-        
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInAnonymously, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, serverTimestamp, query, where, getDocs, writeBatch, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -1034,6 +1025,7 @@ function showLogin() {
 </body>
 
 </html>
+
 
 
 
