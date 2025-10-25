@@ -189,19 +189,29 @@ function showLogin() {
   const password = document.getElementById("register-password").value;
 
   if (!name || !email || !password) {
-    alert("All fields required."); return;
+    alert("All fields required.");
+    return;
   }
+
+  loader.style.display = "flex";
+
   try {
-    const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
-    await firebase.firestore().collection("users").doc(userCredential.user.uid).set({
+    // Use modular v9 syntax
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    
+    // Save user data to Firestore
+    await setDoc(doc(db, "users", userCredential.user.uid), {
       name: name,
       email: email,
       created: new Date().toISOString()
     });
+
     alert("Registration successful! Please login.");
     showLogin();
   } catch (err) {
     alert(err.message);
+  } finally {
+    loader.style.display = "none";
   }
 }
 
@@ -210,19 +220,29 @@ async function signIn() {
   const password = document.getElementById("login-password").value;
 
   if (!email || !password) {
-    alert("Both fields required."); return;
+    alert("Both fields required.");
+    return;
   }
+
+  loader.style.display = "flex";
+
   try {
-    await firebase.auth().signInWithEmailAndPassword(email, password);
+    // Use modular v9 syntax
+    await signInWithEmailAndPassword(auth, email, password);
+    
     alert("Login successful!");
-    // Show your main app; hide login/signup pages
+    
+    // Hide login/signup pages, show app
     document.getElementById("login-page").style.display = "none";
     document.getElementById("signup-page").style.display = "none";
-    // document.getElementById("app-container").style.display = "block";
+    document.getElementById("app-container").style.display = "block";
   } catch (err) {
     alert(err.message);
+  } finally {
+    loader.style.display = "none";
   }
 }
+
         
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInAnonymously, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -1038,6 +1058,7 @@ async function signIn() {
 </body>
 
 </html>
+
 
 
 
