@@ -83,8 +83,7 @@
             <button id="save-name-btn" class="w-full p-4 btn-accent">Continue</button>
         </div>
     </div>
- 
-    console.log("App script loaded");
+
   <div id="app-container" class="min-h-screen flex-col main-page" style="display:none;">
        <!-- Signup Page -->
 <div id="signup-page" style="display:flex; justify-content:center; align-items:center; min-height:100vh; background:linear-gradient(180deg,#03c9f4 0%,#1976d2 100%);">
@@ -201,10 +200,7 @@ async function signIn() {
     alert(err.message);
   }
 }
-     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
-    
+     
     const firebaseConfig = {
             apiKey: "AIzaSyBuOCJKCdV9vYyaODa2tbU5gQAOYAZSxdo",
             authDomain: "rewedme-2d715.firebaseapp.com",
@@ -215,17 +211,15 @@ async function signIn() {
             appId: "1:995026434733:web:26b3aa505221720e292424",
         };
         
-        firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-    document.getElementById("login-page").style.display = "none";
-    document.getElementById("signup-page").style.display = "none";
-    document.getElementById("app-container").style.display = "block";
-  } else {
-    document.getElementById("login-page").style.display = "flex";
-    document.getElementById("signup-page").style.display = "none";
-    document.getElementById("app-container").style.display = "none";
-  }
-});   
+        function showSignup() {
+  document.getElementById("login-page").style.display = "none";
+  document.getElementById("signup-page").style.display = "flex";
+}
+function showLogin() {
+  document.getElementById("signup-page").style.display = "none";
+  document.getElementById("login-page").style.display = "flex";
+} 
+        
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInAnonymously, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, serverTimestamp, query, where, getDocs, writeBatch, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -1040,6 +1034,7 @@ async function signIn() {
 </body>
 
 </html>
+
 
 
 
