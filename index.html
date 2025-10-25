@@ -263,9 +263,7 @@ async function signIn() {
   } finally {
     loader.style.display = "none";
   }
-}
-
-      
+} 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, addDoc, getDoc, setDoc, doc, updateDoc, onSnapshot, query, where, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, onAuthStateChanged, signInAnonymously, updateProfile, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -292,8 +290,6 @@ onAuthStateChanged(auth, (user) => {
     document.getElementById("app-container").style.display = "none";
   }
 });
-
-
         // --- HELPER FUNCTIONS ---
         function showAlert(message) {
             const alertContainer = document.getElementById('custom-alert');
@@ -1087,6 +1083,7 @@ onAuthStateChanged(auth, (user) => {
 </body>
 
 </html>
+
 
 
 
