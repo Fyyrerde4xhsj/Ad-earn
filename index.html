@@ -85,6 +85,38 @@
     </div>
 
     <div id="app-container" class="min-h-screen flex-col main-page">
+       <body>
+  <!-- Add these blocks right after <body>! -->
+
+  <!-- Signup Page -->
+  <div id="signup-page" style="display:flex; justify-content:center; align-items:center; min-height:100vh; background:linear-gradient(180deg,#03c9f4 0%,#1976d2 100%);">
+    <div style="background:#1490e9; border-radius:22px; max-width:380px; width:100%; padding:36px 28px; box-shadow:0 12px 32px 0 rgba(0,56,178,0.27); text-align:center;">
+      <h2 style="color:#fff; font-size:28px; font-weight:700; margin-bottom:8px;">Create Your Account</h2>
+      <div style="color:#eef9ff; font-size:17px; margin-bottom:24px;">Register to start earning.</div>
+      <input id="register-name" type="text" placeholder="Full Name" style="width:100%;padding:15px;font-size:18px;border-radius:12px;margin-bottom:18px;border:none;outline:none;background:rgba(0,0,54,0.08);color:#313b52;">
+      <input id="register-email" type="email" placeholder="Email" style="width:100%;padding:15px;font-size:18px;border-radius:12px;margin-bottom:18px;border:none;outline:none;background:rgba(0,0,54,0.08);color:#313b52;">
+      <input id="register-password" type="password" placeholder="Password" style="width:100%;padding:15px;font-size:18px;border-radius:12px;margin-bottom:18px;border:none;outline:none;background:rgba(0,0,54,0.08);color:#313b52;">
+      <button onclick="signUp()" style="width:100%;padding:15px;font-size:19px;font-weight:600;border:none;border-radius:14px;background:linear-gradient(90deg,#ffad22,#ff5630);color:#fff;margin-bottom:12px;cursor:pointer;">Register</button>
+      <div style="color:#d9e5f7;margin:16px 0 0; font-size:15px;">Already have an account?
+        <a href="#" onclick="showLogin()" style="color:#ffe143;text-decoration:none;font-weight:600;">Login here</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login Page -->
+  <div id="login-page" style="display:none; justify-content:center; align-items:center; min-height:100vh; background:linear-gradient(180deg,#03c9f4 0%,#1976d2 100%);">
+    <div style="background:#1490e9; border-radius:22px; max-width:380px; width:100%; padding:36px 28px; box-shadow:0 12px 32px 0 rgba(0,56,178,0.27); text-align:center;">
+      <h2 style="color:#fff; font-size:28px; font-weight:700; margin-bottom:8px;">Welcome to Earn Money</h2>
+      <div style="color:#eef9ff; font-size:17px; margin-bottom:24px;">Sign in to continue.</div>
+      <input id="login-email" type="email" placeholder="Email" style="width:100%;padding:15px;font-size:18px;border-radius:12px;margin-bottom:18px;border:none;outline:none;background:rgba(0,0,54,0.08);color:#313b52;">
+      <input id="login-password" type="password" placeholder="Password" style="width:100%;padding:15px;font-size:18px;border-radius:12px;margin-bottom:18px;border:none;outline:none;background:rgba(0,0,54,0.08);color:#313b52;">
+      <button onclick="signIn()" style="width:100%;padding:15px;font-size:19px;font-weight:600;border:none;border-radius:14px;background:linear-gradient(90deg,#ffad22,#ff5630);color:#fff;margin-bottom:12px;cursor:pointer;">Login</button>
+      <div style="color:#d9e5f7;margin:16px 0 0; font-size:15px;">Don’t have an account?
+        <a href="#" onclick="showSignup()" style="color:#ffe143;text-decoration:none;font-weight:600;">Sign up here</a>
+      </div>
+    </div>
+  </div>
+           
         <header class="p-4 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <img src="https://placehold.co/50x50/f5af19/ffffff?text=A" id="profile-picture" class="rounded-full border-2 border-yellow-400">
@@ -133,6 +165,47 @@
     <div id="color-game-popup" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4"></div>
     <div id="ad-click-task-popup" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4"></div>
 
+    async function signUp() {
+  const name = document.getElementById("register-name").value.trim();
+  const email = document.getElementById("register-email").value.trim();
+  const password = document.getElementById("register-password").value;
+
+  if (!name || !email || !password) {
+    alert("All fields required."); return;
+  }
+  try {
+    const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+    await firebase.firestore().collection("users").doc(userCredential.user.uid).set({
+      name: name,
+      email: email,
+      created: new Date().toISOString()
+    });
+    alert("Registration successful! Please login.");
+    showLogin();
+  } catch (err) {
+    alert(err.message);
+  }
+}
+
+async function signIn() {
+  const email = document.getElementById("login-email").value.trim();
+  const password = document.getElementById("login-password").value;
+
+  if (!email || !password) {
+    alert("Both fields required."); return;
+  }
+  try {
+    await firebase.auth().signInWithEmailAndPassword(email, password);
+    alert("Login successful!");
+    // Show your main app; hide login/signup pages
+    document.getElementById("login-page").style.display = "none";
+    document.getElementById("signup-page").style.display = "none";
+    // document.getElementById("app-container").style.display = "block";
+  } catch (err) {
+    alert(err.message);
+  }
+}
+    
     <script type="module">
         const firebaseConfig = {
             apiKey: "AIzaSyBuOCJKCdV9vYyaODa2tbU5gQAOYAZSxdo",
@@ -143,6 +216,15 @@
             messagingSenderId: "995026434733",
             appId: "1:995026434733:web:26b3aa505221720e292424",
         };
+        
+        function showSignup() {
+  document.getElementById("login-page").style.display = "none";
+  document.getElementById("signup-page").style.display = "flex";
+}
+function showLogin() {
+  document.getElementById("signup-page").style.display = "none";
+  document.getElementById("login-page").style.display = "flex";
+}
         
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInAnonymously, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -958,5 +1040,6 @@
 </body>
 
 </html>
+
 
 
