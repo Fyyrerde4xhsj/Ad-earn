@@ -174,14 +174,16 @@
             appId: "1:995026434733:web:26b3aa505221720e292424",
         };
 
-        onAuthStateChanged(auth, (user) => {
+        const auth = getAuth(app);
+const db = getFirestore(app);
+
+// Add this here:
+onAuthStateChanged(auth, (user) => {
   if (user) {
-    // User is signed in, show app
     document.getElementById("login-page").style.display = "none";
     document.getElementById("signup-page").style.display = "none";
     document.getElementById("app-container").style.display = "block";
   } else {
-    // User is signed out, show login
     document.getElementById("login-page").style.display = "flex";
     document.getElementById("signup-page").style.display = "none";
     document.getElementById("app-container").style.display = "none";
@@ -1073,6 +1075,7 @@ async function signIn() {
 </body>
 
 </html>
+
 
 
 
