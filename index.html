@@ -584,25 +584,54 @@
                 showAlert("Today's ad limit is reached. Please try again tomorrow.");
                 return;
             }
-            const newCount = (userData.dailyAdCount || 0) + 1; 
-            if (newCount > 0 && appConfig.watchAdSpecialTaskCount > 0 && newCount % appConfig.watchAdSpecialTaskCount === 0) { 
-                document.getElementById('ad-click-task-popup').classList.remove('hidden'); 
-            } else { 
-                loader.style.display = 'flex';
-                try { 
-                    await showAd(); 
-                    const rewardAmount = appConfig.adWatchReward || 10; 
-                    await updateBalance(rewardAmount, 'Ad Watch', 'Watched a regular ad');
-                    await updateDoc(doc(db, "users", currentUser.uid), { dailyAdCount: newCount }); 
-                    userData.dailyAdCount = newCount; 
-                    showAlert(`Congratulations! You earned ${rewardAmount} coins.`); 
-                } catch (error) { 
-                    showAlert(error.toString()); 
-                } finally {
-                    loader.style.display = 'none';
-                }
-            } 
-        }
+            async function claimColorGameReward() {
+  // Today's date in YYYY-MM-DD
+  const today = new Date().toISOString().split("T")[0];
+
+  // Initialize if not present
+  if (typeof userData.dailyColorGameCount !== "number") userData.dailyColorGameCount = 0;
+  if (!userData.lastColorGameDate) userData.lastColorGameDate = "1970-01-01";
+
+  // Reset if new day
+  if (userData.lastColorGameDate !== today) {
+    userData.dailyColorGameCount = 0;
+    userData.lastColorGameDate = today;
+    await updateDoc(doc(db, "users", currentUser.uid), {
+      dailyColorGameCount: 0,
+      lastColorGameDate: today,
+    });
+  }
+
+  // Check limit
+  if (userData.dailyColorGameCount >= 10) {
+    showAlert("You reached today's Color Game limit (10). Please try again tomorrow.");
+    return;
+  }
+
+  // Continue with reward logic...
+  document.getElementById("color-game-popup").classList.add("hidden");
+  loader.style.display = "flex";
+  try {
+    await showAd();
+    const rewardAmount = appConfig.colorGameReward || 10;
+    await updateBalance(rewardAmount, "Color Game", "Won the color picker game");
+
+    // INCREMENT and save counter
+    userData.dailyColorGameCount++;
+    await updateDoc(doc(db, "users", currentUser.uid), {
+      dailyColorGameCount: userData.dailyColorGameCount,
+      lastColorGameDate: today,
+    });
+
+    showAlert(`Congratulations! You earned ${rewardAmount} coins.`);
+  } catch (error) {
+    showAlert(error.toString());
+  } finally {
+    loader.style.display = "none";
+  }
+}
+window.claimColorGameReward = claimColorGameReward;
+
 
         window.claimColorGameReward = async function() { 
             document.getElementById('color-game-popup').classList.add('hidden'); 
@@ -959,6 +988,7 @@
 </body>
 
 </html>
+
 
 
 
