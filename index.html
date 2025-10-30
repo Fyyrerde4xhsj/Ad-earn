@@ -579,12 +579,7 @@
             }); 
         }
         
-        window.claimReward = async function() { 
-            if (appConfig.dailyAdLimit > 0 && userData.dailyAdCount >= appConfig.dailyAdLimit) {
-                showAlert("Today's ad limit is reached. Please try again tomorrow.");
-                return;
-            }
-            async function claimColorGameReward() {
+        async function claimColorGameReward() {
   // Today's date in YYYY-MM-DD
   const today = new Date().toISOString().split("T")[0];
 
@@ -631,7 +626,6 @@
   }
 }
 window.claimColorGameReward = claimColorGameReward;
-
 
         window.claimColorGameReward = async function() { 
             document.getElementById('color-game-popup').classList.add('hidden'); 
@@ -988,6 +982,7 @@ window.claimColorGameReward = claimColorGameReward;
 </body>
 
 </html>
+
 
 
 
